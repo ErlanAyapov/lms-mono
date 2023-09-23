@@ -1,0 +1,9 @@
+asgiref==3.7.2
+Django==3.2.3
+django-ckeditor==6.7.0
+django-js-asset==2.1.0
+Pillow==9.2.0
+pytz==2023.3.post1
+sqlparse==0.4.4
+typing_extensions==4.8.0
+whitenoise==6.5.0

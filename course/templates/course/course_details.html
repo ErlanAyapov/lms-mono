@@ -1,0 +1,363 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} - {{ object_course.title }}{% endblock %}
+{% block content %}
+<script type="text/javascript">
+qestion = []; 
+var identify_question = [];
+var all_questions = 0;
+var fasle_questions_in_answer = '';
+var open_button_id = [0];
+var button_id = 1;
+</script>
+
+{% if request.user.is_authenticated %}
+<div class="container course-container">
+	<div class="course-details-block clear-fix">
+		<h1>Тақырып - {{ object_course.title }} </h1>
+		{% if not user_result  %}
+		<div class="tab">
+			<span class="tab-open-button" style="display:none;">
+				<button>
+					<i class="fas fa-arrow-right"></i>
+				</button>
+			</span>
+			<span class="tab-close-button" style="display:none;">
+				<button>
+					<i class="fas fa-arrow-right"></i>
+				</button>
+			</span>
+			
+			<button class="tablinks" onclick="openTask(event, 'start')" id="defaultOpen">Лекция</button>
+			
+			
+
+			{% for task_t_id in object_course.task_t.all %}
+			<button class="tablinks" onclick="openTask(event, 'task_test_{{ task_t_id.id }}')" id="open_button_t_{{ task_t_id.id }}">Тест тапсырмалар</button>
+			{% endfor %}
+
+			{% for task_i_id in object_course.task_i.all %}
+			<button class="tablinks" onclick="openTask(event, 'identify_{{ task_i_id.id }}')" id="identifyOpen{{ task_i_id.id }}">Сәйкестендір</button>
+			{% endfor %}
+
+			{% for task_id in object_course.task_f.all %}
+			<button class="tablinks" onclick="openTask(event, 'task_feel_{{ task_id.id }}')" id="open_button_{{ task_id.id }}">{{ task_id.t_type }}</button>
+			{% endfor %}
+			
+			<button class="tablinks" onclick="openTask(event, 'result')" id="resultSave">Нәтиже</button>
+
+		</div>
+
+		<div id="start" class="tabcontent"><br><br>
+			{% if not subject_lection %}
+			<h3>Сабақты бастай беріңіз лекция берілмеген</h3>
+			<p>Сабақты бастағаннан кейін парақты жабуға болмайды!</p>
+			{% else %}
+			<h3>{{ subject_lection.title }}</h3>
+			<span>{{ subject_lection.youtube_iframe_tag|safe}}</span>
+			<p>{{ subject_lection.body|safe}}</p>
+			{% endif %}
+			<!-- <div class="tabbuttons">
+				<button>Артқа</button> 
+			</div> -->
+		</div>
+		
+			
+			
+
+
+		
+
+		{% for task_t in object_course.task_t.all %}
+		<div id="task_test_{{ task_t.id }}" class="tabcontent"><br><br>
+			<h3>{{ task_t.title }}</h3>
+			<p>{{ task_t.body|safe }}</p>
+			<div class="test-answer">
+				<label class="task-test-{{ task_t.id }}">
+					<input id="input_1{{ task_t.id }}" type="radio" name="test" onclick="checkAnswerTest(
+						'{{ task_t.answer_1 }}', 
+						'{{ task_t.answer_true }}',
+						'res_answer_t_{{ task_t.id }}',
+						'open_button_t_{{ task_t.id }}',
+						'task-test-{{ task_t.id }}',
+						'task_status_{{ task_t.id }}',
+						'<p>{{ task_t.body|safe }}</p>')">
+					<div class="answer-block-test" >{{ task_t.answer_1 }}</div>	
+				</label>
+				<label class="task-test-{{ task_t.id }}">
+					<input id="input_2{{ task_t.id }}" type="radio" name="test" onclick="checkAnswerTest(
+						'{{ task_t.answer_2 }}', 
+						'{{ task_t.answer_true }}',
+						'res_answer_t_{{ task_t.id }}',
+						'open_button_t_{{ task_t.id }}',
+						'task-test-{{ task_t.id }}',
+						'task_status_{{ task_t.id }}',
+						'<p>{{ task_t.body|safe }}</p>')">
+					<div class="answer-block-test">{{ task_t.answer_2 }}</div>	
+				</label>
+				<label class="task-test-{{ task_t.id }}">
+					<input id="input_3{{ task_t.id }}" type="radio" name="test" onclick="checkAnswerTest(
+						'{{ task_t.answer_3 }}',
+						'{{ task_t.answer_true }}',
+						'res_answer_t_{{ task_t.id }}',
+						'open_button_t_{{ task_t.id }}',
+						'task-test-{{ task_t.id }}',
+						'task_status_{{ task_t.id }}',
+						'<p>{{ task_t.body|safe }}</p>')">
+					<div class="answer-block-test">{{ task_t.answer_3 }}</div>	
+				</label>
+				<label class="task-test-{{ task_t.id }}">
+					<input id="input_4{{ task_t.id }}" type="radio" name="test" onclick="checkAnswerTest(
+						'{{ task_t.answer_4 }}', 
+						'{{ task_t.answer_true }}',
+						'res_answer_t_{{ task_t.id }}',
+						'open_button_t_{{ task_t.id }}',
+						'task-test-{{ task_t.id }}',
+						'task_status_{{ task_t.id }}',
+						'<p>{{ task_t.body|safe }}</p>')">
+					<div class="answer-block-test">{{ task_t.answer_4 }}</div>	
+				</label> 
+
+			</div>
+			<div class="result-block-task" id="res_answer_t_{{ task_t.id }}"></div>
+			
+			<script type="text/javascript"> 
+				// document.getElementById("procent_answer").innerHTML = (qestion.reduce((a, b) => a + b, 0)) / qestion.length; 
+				// $("." + task_test_block + " input").prop("disabled", true);
+				var task_status = localStorage.getItem('task_status_{{ task_t.id }}')
+				console.log(task_status)
+				if (task_status == 'true') {  
+					document.getElementById('res_answer_t_{{ task_t.id }}').innerHTML = 'Дұрыс'; 
+					document.getElementById('open_button_t_{{ task_t.id }}').style = ('background:#02a0da');
+					qestion.push(0)
+					document.getElementById('input_1{{ task_t.id }}').disabled = true;
+					document.getElementById('input_2{{ task_t.id }}').disabled = true;
+					document.getElementById('input_3{{ task_t.id }}').disabled = true;
+					document.getElementById('input_4{{ task_t.id }}').disabled = true;
+				} else if (task_status == 'false') {
+					document.getElementById('res_answer_t_{{ task_t.id }}').innerHTML = 'Қате'; 
+					document.getElementById('open_button_t_{{ task_t.id }}').style = ('background:red');
+
+					qestion.push(1)
+					document.getElementById('input_1{{ task_t.id }}').disabled = true;
+					document.getElementById('input_2{{ task_t.id }}').disabled = true;
+					document.getElementById('input_3{{ task_t.id }}').disabled = true;
+					document.getElementById('input_4{{ task_t.id }}').disabled = true;
+				}
+				all_questions++
+			</script>
+		</div>
+		{% endfor %}
+
+		{% for task_i in object_course.task_i.all %}
+		<div id="identify_{{ task_i.id }}" class="tabcontent"><br><br>
+			<h3>{{ task_i.body }}</h3>
+			<div class="identify-block">
+				<div class="identify-task">
+					<label>
+						<span class="identify-task-text-{{ task_i.id }}">{{ task_i.task_1|slice:"1:" }}</span>
+						<input type="radio" class="identify_task identify_task{{ task_i.id }}" onclick="checkIdentidyTask('identify_task{{ task_i.id }}', 'identify-task-text-{{ task_i.id }}')" value='{{ task_i.task_1|slice:"0:1" }}'>
+					</label>
+					<label>
+						<span class="identify-task-text-{{ task_i.id }}">{{ task_i.task_2|slice:"1:" }}</span>
+						<input type="radio" class="identify_task identify_task{{ task_i.id }}" onclick="checkIdentidyTask('identify_task{{ task_i.id }}', 'identify-task-text-{{ task_i.id }}')" value='{{ task_i.task_2|slice:"0:1" }}'>			
+					</label>
+					<label>
+						<span class="identify-task-text-{{ task_i.id }}">{{ task_i.task_3|slice:"1:" }}</span>
+						<input type="radio" class="identify_task identify_task{{ task_i.id }}" onclick="checkIdentidyTask('identify_task{{ task_i.id }}', 'identify-task-text-{{ task_i.id }}')" value='{{ task_i.task_3|slice:"0:1" }}'>			
+					</label>
+					<label>
+						<span class="identify-task-text-{{ task_i.id }}">{{ task_i.task_4|slice:"1:" }}</span>
+						<input type="radio" class="identify_task identify_task{{ task_i.id }}" onclick="checkIdentidyTask('identify_task{{ task_i.id }}', 'identify-task-text-{{ task_i.id }}')" value='{{ task_i.task_4|slice:"0:1" }}'>			
+					</label>
+				</div>
+				<div class="identify-answer">
+					<label>
+						<input type="radio" class="identify_answer{{ task_i.id }}" onclick="checkIdentidyAnswer('identify_answer{{ task_i.id }}', 'identify-answer-text-{{ task_i.id }}')" value='{{ task_i.answer_1|slice:"0:1" }}'>
+						<span class="identify-answer-text-{{ task_i.id }}">{{ task_i.answer_1|slice:"1:" }}</span>
+					</label>
+					<label>
+						<input type="radio" class="identify_answer{{ task_i.id }}" onclick="checkIdentidyAnswer('identify_answer{{ task_i.id }}', 'identify-answer-text-{{ task_i.id }}')" value='{{ task_i.answer_2|slice:"0:1" }}'>
+						<span class="identify-answer-text-{{ task_i.id }}">{{ task_i.answer_2|slice:"1:" }}</span>
+					</label>
+					<label>
+						<input type="radio" class="identify_answer{{ task_i.id }}" onclick="checkIdentidyAnswer('identify_answer{{ task_i.id }}', 'identify-answer-text-{{ task_i.id }}')" value='{{ task_i.answer_3|slice:"0:1" }}'>
+						<span class="identify-answer-text-{{ task_i.id }}">{{ task_i.answer_3|slice:"1:" }}</span>
+					</label>
+					<label>
+						<input type="radio" class="identify_answer{{ task_i.id }}" onclick="checkIdentidyAnswer('identify_answer{{ task_i.id }}', 'identify-answer-text-{{ task_i.id }}')" value='{{ task_i.answer_4|slice:"0:1" }}'>
+						<span class="identify-answer-text-{{ task_i.id }}">{{ task_i.answer_4|slice:"1:" }}</span>
+					</label>
+				</div>
+				
+			</div>
+			<div class="result-block-task" id="res_answer_identify_{{ task_i.id }}"></div>
+			<button id="res_answer_identify_button_{{ task_i.id }}" onclick="checkIdentidyButton(identify_question, 'res_answer_identify_{{ task_i.id }}', 'identify_task_{{ task_i.id }}', 'res_answer_identify_button_{{ task_i.id }}', 'identifyOpen{{ task_i.id}}', '<p>{{ task_i.body|safe }}</p>')">Тексеру</button>
+
+			<script type="text/javascript">
+				var task_id_identify_task = localStorage.getItem('identify_task_{{ task_i.id }}');
+				if (task_id_identify_task == 'Дұрыс') {
+					document.getElementById('res_answer_identify_{{ task_i.id }}').innerHTML = 'Дұрыс';
+					$("#" + 'identifyOpen{{ task_i.id}}').css("background", '#02a0da'); 
+					qestion.push(0) 
+				} else if (task_id_identify_task == 'Қате') {
+					document.getElementById('res_answer_identify_{{ task_i.id }}').innerHTML = 'Қате';
+					$("#" + 'identifyOpen{{ task_i.id}}').css("background", 'red'); 
+					qestion.push(1)
+				}
+				all_questions++
+			</script>
+		</div>
+		{% endfor %}
+
+		{% for task_f in object_course.task_f.all %}
+		
+			{% if task_f.t_type == 'Бос орынды толтыр' %}
+			<div id="task_feel_{{ task_f.id }}" class="tabcontent"><br><br>
+				<h3>{{ task_f.title }}</h3>
+				<p><textarea rows="10" disabled>{{ task_f.body|safe }}</textarea></p> 
+				<!-- <p><strong>жауабы:</strong>{{ task_f.answer }}</p> -->
+	 			
+				<div class="input-user" id="input_user_{{ task_f.id }}">
+					<input type="text" placeholder="Жауапты енгіз..." id="user_answer_{{ task_f.id }}">
+					<button onclick="checkAnswer('task_answer_{{ task_f.id }}', 'user_answer_{{ task_f.id }}', 'res_answer_{{ task_f.id }}', 'input_user_{{ task_f.id }}', 'open_button_{{ task_f.id }}', 'task_status_{{ task_f.id }}', '<p>{{ task_f.body|safe }}</p>')">Тексеру</button>
+				</div>
+				<div class="result-block-task" id="res_answer_{{ task_f.id }}"></div>
+			</div>
+			<script type="text/javascript">
+				localStorage.setItem('task_answer_{{ task_f.id }}', '{{ task_f.answer }}')
+				var task_status = localStorage.getItem('task_status_{{ task_f.id }}') 
+					console.log(task_status)
+
+				if (task_status == 'true') { 
+					document.getElementById('res_answer_{{ task_f.id }}').innerHTML = 'Дұрыс'; 
+					// $("#open_button_{{ task_f.id }}").css("background", '#02a0da');
+					document.getElementById('open_button_{{ task_f.id }}').style = ('background:#02a0da');
+					document.getElementById('input_user_{{ task_f.id }}').style = ('display:none');
+					qestion.push(0)
+					  
+				} else if (task_status == false){ 
+					document.getElementById('res_answer_{{ task_f.id }}').innerHTML = 'Қате'; 
+					$("#open_button_{{ task_f.id }}").css("background", 'red');
+					qestion.push(1)  
+				}
+				all_questions++
+			</script>
+			{% elif task_f.t_type == 'Кодты аяқта' %}
+			<div id="task_feel_{{ task_f.id }}" class="tabcontent t-compiler"><br><br>
+				<h3>{{ task_f.title }}</h3>
+				<p><textarea rows="5" disabled>{{ task_f.body|safe }}</textarea></p>
+				<br> 
+				
+				<div class="block-compiler task-compiler" id="task_compiler_{{ task_f.id }}">
+					<ul> 
+						<li>input() операторын қолданба</li>
+						<li>Нәтижені result деген айнымалыға сақта</li> 
+						<li>Есепті тексеретін 1 мүмкіндік бар</li> 
+						<li>Есепті шығару барысында <a href="{% url 'compiler' %}" target="_blank">Онлайн компиляторды</a> қолдануға болады</li> 
+					</ul>
+					<br>
+					<form action="" method="POST">
+						{% csrf_token %}	
+						<textarea rows="5" name="python_cod"></textarea>
+						<input type="hidden" name="true_answer" value="{{ task_f.answer }}">
+						<input type="hidden" name="task_id" value="{{ task_f.id }}">
+						<button type="submit">Тексеру</button>
+					</form>
+				</div>
+				<div class="result-block-task" id="res_answer_{{ task_f.id }}"></div>
+				<script type="text/javascript">
+					
+					if ('{{ task_key }}' == '{{ task_f.id }}') {
+						if ('{{ compiler_result }}' == 'Дұрыс') {
+							document.getElementById('res_answer_{{ task_f.id }}').innerHTML = 'Дұрыс'; 
+							document.getElementById('open_button_{{ task_f.id }}').style = ('background:#02a0da');
+							document.getElementById('task_compiler_{{ task_f.id }}').style = ('display:none'); 
+							localStorage.setItem('task_compiler_result_{{ task_f.id }}', 'Дұрыс')
+							qestion.push(0)
+						} else if ('{{ compiler_result }}' == 'Қате') {
+							document.getElementById('res_answer_{{ task_f.id }}').innerHTML = 'Қате'; 
+							$("#open_button_{{ task_f.id }}").css("background", 'red');
+							document.getElementById('task_compiler_{{ task_f.id }}').style = ('display:none'); 
+							localStorage.setItem('task_compiler_result_{{ task_f.id }}', 'Қате')
+							fasle_questions_in_answer += '<p>{{ task_f.body|safe }}</p>';
+							localStorage.setItem('flase_question_body', fasle_questions_in_answer)
+							qestion.push(1) 
+						}
+					}
+
+					var task_status = localStorage.getItem('task_compiler_result_{{ task_f.id }}') 
+					if (task_status == 'Дұрыс') {
+						document.getElementById('res_answer_{{ task_f.id }}').innerHTML = 'Дұрыс'; 
+						document.getElementById('open_button_{{ task_f.id }}').style = ('background:#02a0da');
+						document.getElementById('task_compiler_{{ task_f.id }}').style = ('display:none'); 
+					} else if (task_status == 'Қате') {
+						document.getElementById('res_answer_{{ task_f.id }}').innerHTML = 'Қате'; 
+						$("#open_button_{{ task_f.id }}").css("background", 'red');
+						document.getElementById('task_compiler_{{ task_f.id }}').style = ('display:none');			
+					}
+					all_questions++
+				</script>
+				<div class="result-block-task" id="res_answer_{{ task_f.id }}"></div>
+			</div>
+			{% endif %}	
+		{% endfor %}
+
+		<div id="result" class="tabcontent"><br><br>
+			<h3>Сабақты аяқтау</h3>
+			<p>Сабақты бастағаннан кейін парақты жабуға болмайды!</p> 
+
+			<div class="result-block">
+				<div id="all_answer"></div> 
+				<div id="true_answer"></div> 
+				<div id="false_answer"></div> 
+				<div class="input-user">	
+					<form action="{% url 'save_result' %}" method="POST">
+						{% csrf_token %}
+						<input type="hidden" name="course" id="id_course" value="{{ object_course.id }}">
+						<input type="hidden" name="all_task" maxlength="3" required id="id_all_task">
+						<input type="hidden" name="true_task" maxlength="3" required id="id_true_task">
+						<input type="hidden" name="false_task" maxlength="3" required id="id_false_task">
+						<input type="hidden" name="user_false_answers" required id="id_user_false_answers">
+						<input type="text" name="feedback" maxlength="520" required id="id_feedback" 	placeholder="Кері байланыс">
+						<button id="button_save" onclick="localStorage.clear()">Сақтау</button>
+					</form>
+				</div>
+			</div>
+		</div>
+		{% else  %}
+		<div class="tab">
+			<!-- <button class="tablinks" onclick="openTask(event, 'result')" id="resultSave"></button> -->
+		</div>
+		<div id="result" class="tabcontent"><br><br>
+			<h3>Нәтиже</h3>
+			<p>Сіз сабақты өтіп қойдыңыз</p> 
+			{% for res in user_result %}
+			<div class="result-block">
+				<div id="all_answer">Барлығы {{ res.all_task }}</div> 
+				<div id="true_answer">Дұрыс {{ res.true_task }}</div> 
+				<div id="false_answer">Қате {{ res.false_task }}</div> 
+				 
+			</div>
+			{% if res.user_false_answers %}
+			<div class="false-answers-block">
+				<h3>Қате сұрақтар</h3>
+				{{ res.user_false_answers|safe }}
+			</div>
+			{% endif %}
+			{% endfor %}
+		</div>
+		{% endif %}
+	</div>
+</div>
+
+{% else %}
+<div class="container" style="text-align: center;">
+	<h1>Сізге аккаунт керек:)</h1>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript" src="{% static 'scripts/course.js' %}"></script>	
+{% endblock %}

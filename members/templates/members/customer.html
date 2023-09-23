@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+	 
+	<div class="container">
+		<div class="customer-create-form">
+			<form action="{% url 'customer' %}" method="POST">
+				<h2>Туылған күніңіз</h2>
+				{% csrf_token %}
+				<input type="hidden" name="user" id="id_user" value="{{ request.user.id }}">
+				<select name="birth_day" required id="id_birth_day">
+					{% for day in day %}
+						<option value="{{ day }}">{{ day }}</option>
+					{% endfor %}
+				</select>
+				<select name="birth_mounth" required id="id_birth_mounth">
+					{% for mounth in mounth %}
+						<option value="{{ mounth }}">{{ mounth }}</option>
+					{% endfor %}	
+				</select>
+				<select name="birth_year" required id="id_birth_year">
+					{% for year in year %}
+						<option value="{{ year }}">{{ year }}</option>
+					{% endfor %}	
+				</select>
+				<br>
+				<button type="submit" class="submit">Сақтау</button>
+			</form>
+		</div>
+	</div>
+
+{% endblock %} 

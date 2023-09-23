@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+	<div class="block-compiler">
+		
+		<h1>Python - компилятор</h1><br>
+		<ul>
+			<h4>Компилятор нұсқаулығы</h4>
+			<li>input() операторын қолданба</li>
+			<li>Нәтижені result деген айнымалыға сақта</li>
+			<li>Дұрыс жұмыс жасау үшін тіркелу қажет</li>
+		</ul><br><br>
+		<form action="" method="post">
+			{% csrf_token %}
+			<textarea name="python_cod" rows="15" required>{{ python_cod }}</textarea>
+			<button type="submit">Іске қосу</button>
+		</form>
+		<div class="compile-res">   
+			<p>>>> {{ compile_res }}</p>  
+		</div>
+	</div>
+</div>
+{% endblock %}

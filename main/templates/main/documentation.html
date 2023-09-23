@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+	<div class="doc-container">
+		{% for doc in documentation %}
+		<div class="doc-block">
+			<details>
+				<summary><h3>{{ doc.title }}</h3></summary>
+				<div class="doc-content">
+					<hr>
+					<p>{{ doc.body }}</p>
+					{{ doc.video_link|safe }}
+				</div>
+			</details>
+		</div> 
+		{% endfor %}
+	</div>
+</div>
+{% endblock %}

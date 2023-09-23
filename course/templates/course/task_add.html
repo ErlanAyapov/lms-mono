@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %} 
+<div class="container">
+	<div class="task-add-form">
+		<h1>Тапсырма қосу</h1>
+		<form action="" method="post">
+			{% csrf_token %} 
+			<input type="text" name="title" maxlength="75" required id="id_title" placeholder="Тапсырма тақырыбы">
+			<textarea name="body" cols="40" rows="10" required id="id_body" placeholder="Тапсырма мәтіні"></textarea>
+			<input type="text" name="answer" maxlength="25" required id="id_answer" placeholder="Тапсырма жауабы">
+			<p>Тапсырма түрі</p>
+			<select name="t_type" id="id_t_type" required=""> 
+				<option value="Кодты аяқта">Кодты аяқта</option>
+				<option value="Бос орынды толтыр" selected>Бос орынды толтыр</option>
+			</select>
+		<button type="submit">Тапсырма қосу</button>			
+		</form>
+	</div>
+</div>
+{% endblock %} 

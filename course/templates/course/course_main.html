@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+	<div class="block-content">
+		<h1>Сабақтар </h1>
+		<hr><br>
+		<div class="subject-container">
+
+		{% for subject in object_list %}
+			<div class="subject-block">
+				<details>
+					<summary>{{ subject.title }} - тақырып көру</summary><hr> 
+					<div class="subject-content">
+						
+						{% for synup_sort in range %}
+							{% for crs in subject.course.all %}
+							{% if synup_sort == crs.synup %}
+							<p><a href="{% url 'course_page' crs.id %}">{{ crs }}</a><span>{{ crs.synup }} сынып  
+								{% for teacher in subject.teachers.all %}
+									{% if teacher.id == request.user.customer.id %}
+										<a href="{% url 'user_result' crs.id %}"><i class="fas fa-eye"></i></a>  
+									{% endif %}
+								{% endfor %}
+							</span> </p>
+							{% endif %}
+						{% endfor %}
+						{% endfor %}
+					</div>
+				</details>
+			</div>
+		{% endfor %}
+		</div>
+	</div>
+</div>
+{% endblock %}

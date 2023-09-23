@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %} 
+<div class="container">
+	<div class="form-add-course">
+		<h1>Сабақ қосу</h1>
+		<form action="" method="post">
+			{% csrf_token %}
+			<input type="text" name="title" maxlength="75" required id="id_title" placeholder="Сабақ тақырыбы"><br>
+			<input type="date" name="date" maxlength="30" required id="id_date" placeholder="Уақытын таңдаңыз"><br>
+			<input type="hidden" name="teacher" maxlength="30" required id="id_teacher" value="{{ request.user.id }}"><br>
+			<p><strong>Код және бос орындарды толтыр - тапсырмалары</strong></p>
+			{{ task_add_form.task_f }}<br>
+			<a href="{% url 'task_add' %}" target="_blank">Тапсырма қосу</a>
+			<p><strong>Тест - тапсырмалары</strong></p>
+			{{ task_add_form.task_t }}<br>
+			<a href="{% url 'task_add' %}" target="_blank">Тапсырма қосу</a>
+			<p><strong>Сыныпты енгіз</strong></p>
+			{{ task_add_form.synup }}<br>
+			<!-- {{ task_add_form.as_p }} -->
+		<button type="submit">Сабақ қосу +</button>		
+		</form>
+	</div>
+</div>
+{% endblock %} 

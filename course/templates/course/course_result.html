@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<div class="container">
+
+	<div class="user-result-block">
+		<h2>{{ object.title }} - мониторинг</h2>
+		
+		{% if user_results %}
+			{% for user_b in user_results %} 
+			<details>
+				<summary>
+					<div class="users-block">
+					<div class="user-name">{{ user_b.user.first_name }} {{ user_b.user.last_name }}</div>	 
+					<div class="user-results">
+						<span>Жалпы: {{ user_b.all_task }}</span>	
+						<span>Дұрыс: {{ user_b.true_task }}</span>	
+						<span>Қате: {{ user_b.false_task }}</span>
+					</div>
+					<div class="user-date">
+						{{ user_b.date|slice:"0:16" }}
+					</div>
+					</div>
+				</summary>
+				<div class="feedback-user">
+					{{ user_b.feedback }}
+				</div>
+			</details>
+			{% endfor %}	
+		{% else %}
+			<div class="not-content">
+				<h3>Әлі бірде бір оқушы тапсырмады!</h3>
+			</div>
+		{% endif %}
+	</div>
+</div>
+
+{% endblock %}

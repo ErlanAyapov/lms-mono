@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+	<div class="members-conatainer">
+
+		<div class='auth-block-container'>
+			<h2>Регистрация</h2>
+
+			<form action="{% url 'register' %}" method="POST">
+				{% csrf_token %}
+				<input type="text" name="username" maxlength="150" autofocus required id="id_username" placeholder="@қолданушы атауы">
+				<input type="text" name="first_name" maxlength="150" autofocus required id="id_first_name" placeholder="Есімі">
+				<input type="text" name="last_name" maxlength="150" autofocus required id="id_last_name" placeholder="Тегі">
+				<input type="password" name="password1" autocomplete="new-password" required id="id_password1" placeholder="Құпия сөз">
+				<input type="password" name="password2" autocomplete="new-password" required id="id_password2" placeholder="Құпия сөз (қайталау)">
+				<button class="submit">Акккаунт ашу</button>
+			</form>
+		</div>
+		<script type="text/javascript">
+			alert('Құпия сөзіңіз басқа жеке ақпаратыңызға тым ұқсас болмауы керек. Құпия сөзіңізде кемінде 8 таңба болуы керек. Құпия сөзіңіз жиі қолданылатын құпия сөз болуы мүмкін емес. Құпия сөзіңіз толығымен сандық болуы мүмкін емес. ')
+		</script>
+	</div>
+{% endblock %}
