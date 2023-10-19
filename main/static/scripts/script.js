@@ -19,7 +19,7 @@ function menu_position(menu_status) {
 		$("nav").css("padding-top", '20px');	
 		$("nav li").css("padding", '0');	
 		$("nav li").css("padding-top", '10px');	
-		$("nav li").css("padding-left", '60px');	
+		$("nav li").css("padding-left", '40px');	
 		$("#open_menu").css("left", '235px');
 		// $(".container").css("margin-left", '250px');
 	}	

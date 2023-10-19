@@ -28,14 +28,20 @@ def course_details_view(request, pk):
 	# print(request.course.id)
 	user_result =  UserResult.objects.filter(course = request.course, user = request.user.id)
 	# print(user_result)
+
+
 	data = {
 		'range': [str(i) for i in range(1, 12)],
 		'object_course':	request.course,
 		'compiler_result':	result,
 		'task_key':			task_key,
 		'user_result':		user_result,
-		'subject_lection': 	SubjectLection.objects.get(lesson = request.course)
 	}
+	if SubjectLection.objects.filter(lesson = request.course):
+		data.update({
+        'subject_lection': SubjectLection.objects.get(lesson=request.course),
+    	})
+
 	return render(request, 'course/course_details.html', data)
 
 

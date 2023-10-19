@@ -5,7 +5,7 @@
 	<div class="container">
 		<div class="customer-create-form">
 			<form action="{% url 'customer' %}" method="POST">
-				<h2>Туылған күніңіз</h2>
+				<h2>Дата рождения</h2>
 				{% csrf_token %}
 				<input type="hidden" name="user" id="id_user" value="{{ request.user.id }}">
 				<select name="birth_day" required id="id_birth_day">
@@ -24,7 +24,7 @@
 					{% endfor %}	
 				</select>
 				<br>
-				<button type="submit" class="submit">Сақтау</button>
+				<button type="submit" class="submit">Сохранить</button>
 			</form>
 		</div>
 	</div>

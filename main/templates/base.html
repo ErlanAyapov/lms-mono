@@ -22,10 +22,10 @@
 			</div>
 			<div class="header-title-right">
 				{% if request.user.is_authenticated %} 
-				<a href="{% url 'members' %}"><i class="fas fa-user-graduate"></i> {{ request.user }}</a> 
+				<a href="{% url 'profile' request.user.id  %}"><i class="fas fa-user-graduate"></i> {{ request.user }}</a> 
 				<a href="{% url 'logout' %}" id="logout"><i class="fas fa-power-off"></i></a>
 				{% else %}
-				<a href="{% url 'members' %}"><span>Кіру</span> <i class="fas fa-sign-in-alt"></i></a>
+				<a href="{% url 'members' %}"><span>Аккаунт</span> <i class="fas fa-sign-in-alt"></i></a>
 				{% endif %}
 			</div>
 		</div>	
@@ -42,9 +42,9 @@
 	<nav>
 		<div id="open_menu">☰<span id="open_menu_text"></span></div>
 		<ul>
-			<li><a href="{% url 'main' %}"><i class="fas fa-home"></i> <span class="nav-link-text">Басты парақ</span></a></li>
-			<!-- <li><a href="{% url 'compiler' %}"><i class="fas fa-code"></i> <span class="nav-link-text">Компилятор</span></a></li> -->
-			<li><a href="{% url 'subject' %}"><i class="fas fa-graduation-cap"></i> <span class="nav-link-text">Мектеп</span></a></li> 
+			<li><a href="{% url 'main' %}"><i class="fas fa-home"></i> <span class="nav-link-text">Басты бет</span></a></li>
+			<li><a href="{% url 'compiler' %}"><i class="fas fa-code"></i> <span class="nav-link-text">Компилятор</span></a></li>
+			<li><a href="{% url 'subject' %}"><i class="fas fa-graduation-cap"></i> <span class="nav-link-text">Курстар</span></a></li> 
 			<li><a href="https://kundelik.kz/teachers/" target="_blank"><i class="fas fa-book-reader"></i> <span class="nav-link-text">Kundelik.kz</span></a></li>
 			<li><a href="{% url 'documentation' %}"><i class="fas fa-newspaper"></i> <span class="nav-link-text">Нұсқаулық</span></a></li>
 			

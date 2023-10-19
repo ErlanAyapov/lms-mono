@@ -4,35 +4,58 @@ from members.models import Customer
 from ckeditor.fields import RichTextField
 
 
+COURSE_TYPE_SELF = '1' 
+
+COURSE_TYPE_OPTIONS = (
+	(COURSE_TYPE_SELF, '1'),
+	('2', '2'),
+	('3', '3'),
+	('4', '4'),
+	('5', '5'),
+	('6', '6'),
+	('7', '7'),
+	('8', '8'),
+	('9', '9'),
+	('10', '10'),
+	('11', '11'),
+)
+SUBJECT_TYPE_SELF = 'В платформе'
+
+SUBJECT_TYPE_OPTIONS = (
+	('OP', SUBJECT_TYPE_SELF),
+	('IN', 'Индивидуальный')
+
+)
+
 class TaskIsIdentify(models.Model):
-	title	= models.CharField('Тапсырма тақырыбы', max_length = 1000)
-	body 	= models.TextField('Тапсырма мәтіні')
+	title	= models.CharField('Заголовок заданий ', max_length = 1000)
+	body 	= models.TextField('Текст заданий')
 
-	task_1		= models.CharField('Сұрақ', max_length = 200)
-	task_2		= models.CharField('Сұрақ', max_length = 200)
-	task_3		= models.CharField('Сұрақ', max_length = 200)
-	task_4		= models.CharField('Сұрақ', max_length = 200)
+	task_1		= models.CharField('Вопрос', max_length = 200)
+	task_2		= models.CharField('Вопрос', max_length = 200)
+	task_3		= models.CharField('Вопрос', max_length = 200)
+	task_4		= models.CharField('Вопрос', max_length = 200)
 
-	answer_1	= models.CharField('Жауап', max_length = 200)
-	answer_2	= models.CharField('Жауап', max_length = 200)
-	answer_3	= models.CharField('Жауап', max_length = 200)
-	answer_4	= models.CharField('Жауап', max_length = 200)
+	answer_1	= models.CharField('Ответ', max_length = 200)
+	answer_2	= models.CharField('Ответ', max_length = 200)
+	answer_3	= models.CharField('Ответ', max_length = 200)
+	answer_4	= models.CharField('Ответ', max_length = 200)
 
 	def __str__(self):
 		return self.title
 
 	class Meta:
-		verbose_name = 'Тапсырма'
-		verbose_name_plural = 'Тапсырмалар (Сәйкестендір)'
+		verbose_name = 'Задание'
+		verbose_name_plural = 'Задание (Сопоставить)'
 
 
 class TaskIsFill(models.Model):
-	title	= models.CharField('Тапсырма тақырыбы', max_length = 1000)
-	body 	= models.TextField('Тапсырма мәтіні')
-	answer 	= models.CharField('Тапсырма жауабы', max_length = 100)
+	title	= models.CharField('Заголовок задание', max_length = 1000)
+	body 	= models.TextField('Вопрос')
+	answer 	= models.CharField('Ответ', max_length = 100)
 
-	TASK_TYPE_FILL = 'Кодты аяқта'
-	TASK_TYPE_SELF = 'Бос орынды толтыр'
+	TASK_TYPE_FILL = 'Завершит код'
+	TASK_TYPE_SELF = 'Заполнит пустую линию'
 
 	TASK_TYPE_OPTIONS = (
 		(TASK_TYPE_SELF, TASK_TYPE_SELF),
@@ -40,7 +63,7 @@ class TaskIsFill(models.Model):
 	)
 
 	t_type	= models.CharField(max_length=100,
-		verbose_name='Тапсырма түрі',
+		verbose_name='Тип заданий',
 		choices=TASK_TYPE_OPTIONS,
 		default=TASK_TYPE_SELF)
 
@@ -48,25 +71,25 @@ class TaskIsFill(models.Model):
 		return self.title
 
 	class Meta:
-		verbose_name = 'Тапсырма '
-		verbose_name_plural = 'Тапсырмалар (Бос орынды толтыр)'
+		verbose_name = 'Задание '
+		verbose_name_plural = 'Задание (Заполнит)'
 
 
 class TaskIsTest(models.Model):
-	title			= models.CharField('Тапсырма тақырыбы', max_length = 200)
-	body			= models.TextField('Тапсырма мәтіні және коды')
-	answer_true		= models.CharField('Тапсырма жауабы', max_length = 200)
-	answer_1	= models.CharField('Нұсқа (1)', max_length = 200)
-	answer_2	= models.CharField('Нұсқа (2)', max_length = 200)
-	answer_3	= models.CharField('Нұсқа (3)', max_length = 200)
-	answer_4	= models.CharField('Нұсқа (4)', max_length = 200, default = 'Нұсқа (4)')
+	title			= models.CharField('Заголовок задание', max_length = 200)
+	body			= models.TextField('Вопрос')
+	answer_true		= models.CharField('Ответ', max_length = 200)
+	answer_1	= models.CharField('Вариант (1)', max_length = 200)
+	answer_2	= models.CharField('Вариант (2)', max_length = 200)
+	answer_3	= models.CharField('Вариант (3)', max_length = 200)
+	answer_4	= models.CharField('Вариант (4)', max_length = 200, default = 'Нұсқа (4)')
 
 	def __str__(self):
 		return self.title
 
 	class Meta:
-		verbose_name = 'Тапсырма'
-		verbose_name_plural = 'Тапсырмалар (Тест)'
+		verbose_name = 'Задание'
+		verbose_name_plural = 'Задание (Тест)'
 
 
 class Course(models.Model):
@@ -77,45 +100,34 @@ class Course(models.Model):
 	task_t	= models.ManyToManyField(TaskIsTest, verbose_name='Тапсырма түрі (Тест)', blank=True, related_name = 'course_task')
 	task_i 	= models.ManyToManyField(TaskIsIdentify, verbose_name='Тапсырма түрі (Сәйкестендір)', blank=True, related_name = 'course_task')
 	# date_time = models.DateTimeField('Сабақ уақыты')
-	COURSE_TYPE_SELF = '1' 
-
-	COURSE_TYPE_OPTIONS = (
-		(COURSE_TYPE_SELF, '1'),
-		('2', '2'),
-		('3', '3'),
-		('4', '4'),
-		('5', '5'),
-		('6', '6'),
-		('7', '7'),
-		('8', '8'),
-		('9', '9'),
-		('10', '10'),
-		('11', '11'),
-	)
+	course_type = models.CharField(verbose_name = 'Сабақ түрі', choices = SUBJECT_TYPE_OPTIONS, default = SUBJECT_TYPE_SELF, max_length = 50)
 
 	synup	= models.CharField(max_length=100,
 		verbose_name='Сыныпты көрсетіңіз',
 		choices=COURSE_TYPE_OPTIONS,
 		default=COURSE_TYPE_SELF)
 
+
+
 	def __str__(self):
 		return self.title
 
 	class Meta:
-		verbose_name = 'Сабақ'
-		verbose_name_plural = 'Сабақтар'
+		verbose_name = 'Урок'
+		verbose_name_plural = 'Уроки'
 
 class Subject(models.Model):
 	title	 = models.CharField('Пән атауы', max_length = 25)
 	teachers = models.ManyToManyField(Customer, verbose_name='Пән мұғалімдері', blank=True, related_name = 'teacher_sbj')
 	course	 = models.ManyToManyField(Course, verbose_name='Сабақтар', blank=True, related_name = 'course_sbj')
-
+	students = models.ManyToManyField(User, verbose_name = 'Студенттер')
+	subject_type = models.CharField(verbose_name = 'Сабақ түрі', choices = SUBJECT_TYPE_OPTIONS, default = SUBJECT_TYPE_SELF, max_length = 50)
 	def __str__(self):
 		return self.title
 
 	class Meta:
-		verbose_name = 'Пән'
-		verbose_name_plural = 'Пәндер'
+		verbose_name = 'Предмет'
+		verbose_name_plural = 'Предметы'
 
 class SubjectLection(models.Model):
 	lesson 				= models.OneToOneField(Course, verbose_name = 'Сабақ', on_delete = models.CASCADE, null = True)
@@ -128,7 +140,7 @@ class SubjectLection(models.Model):
 
 	class Meta:
 		verbose_name = 'Лекция'
-		verbose_name_plural = 'Лекциялар'
+		verbose_name_plural = 'Лекций'
 
 
 class UserResult(models.Model):
@@ -146,5 +158,5 @@ class UserResult(models.Model):
 		return f'{str(self.user.first_name)} {str(self.user.last_name)} - | - {self.feedback}'
 
 	class Meta:
-		verbose_name = 'Қолданушы нәтижесін'
-		verbose_name_plural = 'Қолданушы нәтижелері'
+		verbose_name = 'Результат'
+		verbose_name_plural = 'Результаты'

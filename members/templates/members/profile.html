@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} - {{ object.username}}{% endblock %}
+{% block link %}<link rel="stylesheet" type="text/css" href="{% static 'main/style/members.css' %}">{% endblock %}
+
+{% block content %}
+<style type="text/css">
+.profile-container {
+	max-width: 90%;
+	margin-left: 7%;
+	margin-top: 5vh;
+/*	background: #ddd;*/
+	min-height: 500px;
+}
+.user-info-block {
+	display: inline-flex;
+
+}
+.user-info-block div {
+	margin: 5px;
+	border-radius: 10px;
+	box-shadow: 0 0 10px #444;
+}
+.user-info-left-block {
+	width: 230px;
+	background: #ddd;
+	height: auto;
+	position: relative;
+	padding: 5px;
+/*	padding: 20px 0;*/
+
+}
+.user-info-left-block img {
+	border-radius: 50%;	
+}
+.user-info-left-block p a {
+	text-align: center;
+	text-decoration: none;
+/*	background: cyan;*/
+	color: #fff;
+	font-size: 18px;
+	padding: 3px;
+} 
+.user-info-left-block p a i {
+	padding: 3px;
+	font-size: 18px;
+}
+#info_change_btn {
+	margin-top: 20px;
+	background: gray;	
+	margin: 3px;
+	border-radius: 8px;
+	transition: 0.2s;
+}
+#info_change_btn:hover, #info_change_btn1:hover {
+	background: #666;
+
+}
+.user-info-left-block p {
+	text-align: center;
+	font-size: 22px;
+}
+.user-info-right-block {
+	background: #ddd;
+	min-width: 950px;
+	width: 100%;
+	font-size: 18px;
+	padding: 10px;
+	color: #333;
+	position: relative;
+}
+#info_change_btn1 {
+	position: absolute;
+	bottom: 0;
+	width: 99.4%;
+	text-align: center;
+	margin-top: 20px;
+	background: gray;	
+	margin: 3px;
+	border-radius: 8px;
+	transition: 0.2s;
+	padding: 2px;
+	left: 0;
+}
+#info_change_btn1 a {
+	text-align: center;
+	text-decoration: none;
+/*	background: cyan;*/
+	color: #fff;
+	font-size: 18px;
+	padding: 3px;
+}
+.user-info-right-block p {
+	margin-bottom: 3px;
+}
+.user-info-right-block span {
+	font-size: 18px;
+	color: #000;
+}
+main article {
+	gap: 10px;
+}
+main article section {
+	background: #eee;
+	border-radius: 5px;
+	box-shadow: 0 0 3px #222;
+	padding: 5px;
+
+}
+article section p {
+	margin: 0;
+	padding: 0;
+	margin-left: 15px;
+	color: red;
+}
+.user-result-block {
+	width: 99.3%;
+	margin: 5px;
+	box-shadow: 0 0 10px #444;
+	background: #ddd;
+}
+.user-result-block div {
+
+}
+</style>
+	<div class="profile-container">
+		<div class="user-info-block">
+			<div class="user-info-left-block">
+				<span>
+					{% if customer.image %}
+					<img src="{{ customer.image.url }}" width="200" height="200">
+					{% else %}
+					<img src="{% static 'image/user-def.png' %}" width="200" height="200">
+					
+					{% endif %}
+				</span>
+				<p>
+					{% if object.first_name %}
+					{{ object.first_name }}	{{ object.last_name }}
+					{% else %}
+					Аты Жөні
+					{% endif %}
+				</p>
+				<p id="info_change_btn">
+					<a href="{% url 'update_user' object.id %}" style="">Өзгерту<i class="fas fa-cog"></i></a>
+					
+				</p>
+			</div>
+			<div class="user-info-right-block">
+				<p><span>Биография: </span>{{ customer.biography }}</p>
+				<p><span>Статус:  </span>{{ customer.user_class }}</p>
+				<p><span>Дата рождения: </span>{{ customer.birth_day }} {{ customer.birth_mounth }} {{ customer.birth_year }}г</p>
+				<p><span>Адрес: </span>{{ customer.address }}</p>
+				<p><span>Телефон: </span>{{ customer.phone_number }}</p>
+				<p id="info_change_btn1">  
+					<a href="{% url 'customer_update' customer.id %}" style="">Өзгерту<i class="fas fa-cog"></i></a>
+				</p>
+			</div>
+			
+		</div>
+		{% if results %}
+	 	<article class="user-result-block">
+	 		<h3>Прогресс ученика</h3>
+	 		<hr>
+			{% for result in results %}
+				<section>
+					<div><h5>Урок: {{ result.course}}</h5></div>
+					<div>Количество вопросов: {{ result.all_task}}</div>
+					<div>Правильные ответы: {{ result.true_task}}</div>
+					<div>Неправильные ответы: {{ result.false_task}}</div>
+					<div>{{ result.user_false_answers|safe}}<hr></div>
+					<div>Комментарий от ученика: {{ result.feedback}}</div>
+				</section>
+
+			{% endfor %}
+	 	</article>
+		{% endif %}
+
+	</div>
+
+
+{% endblock %}

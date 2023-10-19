@@ -40,8 +40,9 @@
 
 .form-container button {
 	border-radius: 20px;
-	border: 1px solid #FF4B2B;
-	background-color: #FF4B2B;
+	border: 1px solid #7d00ff;
+	background: rgb(125,0,255);
+background: linear-gradient(42deg, rgba(125,0,255,1) 0%, rgba(3,2,5,1) 48%, rgba(0,11,239,1) 100%);
 	color: #FFFFFF;
 	font-size: 12px;
 	font-weight: bold;
@@ -81,7 +82,7 @@ input {
 	background-color: #eee;
 	border: none;
 	padding: 12px 15px;
-	margin: 8px 0;
+	margin: 3px 3px;
 	width: 100%;
 }
 
@@ -157,8 +158,8 @@ input {
 
 .overlay {
 	background: #FF416C;
-	background: -webkit-linear-gradient(to right, #FF4B2B, #FF416C);
-	background: linear-gradient(to right, #FF4B2B, #FF416C);
+	background: rgb(125,0,255);
+background: linear-gradient(209deg, rgba(125,0,255,1) 20%, rgba(0,11,239,1) 100%);
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: 0 0;
@@ -221,7 +222,16 @@ input {
 	height: 40px;
 	width: 40px;
 }
- 
+.name-block {
+	display: flex;
+	flex-wrap: wrap;
+  justify-content: space-between;
+}
+.name-block input {
+/*	margin: 3px 0;*/
+	width: calc(1/2*100% - (1 - 1/2)*8px);
+  margin: 3px 0 5px;
+}
 </style>
 <!-- <div class="members-container container">
 	<div class="auth-block-container">
@@ -238,47 +248,53 @@ input {
 <div class="container" id="container">
 	<div class="form-container sign-up-container">
 		<form action="{% url 'register' %}" method="POST">
-			<h1>Тіркелу</h1>
+			<h1>Регистрация</h1>
 			<div class="social-container">
 				<a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
 				<a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
 				<a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
 			</div>
-			<span>or use your email for registration</span>
+			<span>или используйте почту</span>
 			{% csrf_token %} 
-			<input type="text" placeholder="Қолданушы атауы" />
-			<input type="email" placeholder="Email" /> 
-			<input type="password" placeholder="Құпия сөз" />
-			<button type="submit">Тіркелу</button>
+			<input name="username" type="text" placeholder="@Имя пользователя" />
+			<div class="name-block">
+				<input name="first_name" type="text" placeholder="Имя" /> 
+				<input name="last_name" type="text" placeholder="Фамилия" />
+			</div>
+			<input name="email" type="text" placeholder="Email" /> 
+			 
+			<input name="password1" type="password" placeholder="Пороль" />
+			<input name="password2" type="password" placeholder="Повторите пороль" />
+			<button type="submit">Зарегистрироваться</button>
 		</form>
 	</div>
 	<div class="form-container sign-in-container">
 		<form action="" method="post">
-			<h1>Кіру</h1>
+			<h1>Войти</h1>
 			<div class="social-container">
 				<a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
 				<a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
 				<a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
 			</div>
-			<span>or use your account</span>
+			<span>или используйте аккаунт</span>
 			{% csrf_token %} 
-			<input type="text" name="username" id="id_username" placeholder="Қолданушы атауы" />
-			<input type="password" name="password" id="id_password" placeholder="Құпия сөз" />
-			<a href="#">Құпия сөзді ұмыттым</a>
-			<button type="submit">алға</button>
+			<input type="text" name="username" id="id_username" placeholder="Имя пользователя" />
+			<input type="password" name="password" id="id_password" placeholder="Пороль" />
+			<a href="#">Я забыл пороль</a>
+			<button type="submit">Авторизоваться</button>
 		</form>
 	</div>
 	<div class="overlay-container">
 		<div class="overlay">
 			<div class="overlay-panel overlay-left">
-				<h1>Менде аккаунт бар, артқа!</h1>
-				<p>Өтінемін егер сізде аккаунт болса осы батырманы басып аккаунтқа кіріңіз</p>
-				<button class="ghost" id="signIn">Аккаутқа кіру</button>
+				<h1>Назад!</h1>
+				<p>Если у вас есть аккаунт то используйте его</p>
+				<button class="ghost" id="signIn">Назад</button>
 			</div>
 			<div class="overlay-panel overlay-right">
-				<h1>Сәлем, досым!</h1>
-				<p>Егер сенде аккаунт жоқ болса осы батырманы басып тіркел</p>
-				<button class="ghost" id="signUp">Тіркелу</button>
+				<h1>Привет, мой друг!</h1>
+				<p>Если у тебя нету аккаунт то скорей зарегистрируйся!</p>
+				<button class="ghost" id="signUp">Зарегистрироваться</button>
 			</div>
 		</div>
 	</div>

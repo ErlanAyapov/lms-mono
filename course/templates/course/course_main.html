@@ -3,14 +3,14 @@
 {% block content %}
 <div class="container">
 	<div class="block-content">
-		<h1>Сабақтар </h1>
+		<h1>Курстар </h1>
 		<hr><br>
 		<div class="subject-container">
 
 		{% for subject in object_list %}
 			<div class="subject-block">
 				<details>
-					<summary>{{ subject.title }} - тақырып көру</summary><hr> 
+					<summary>{{ subject.title }} - сабақтар тізімі</summary><hr> 
 					<div class="subject-content">
 						
 						{% for synup_sort in range %}

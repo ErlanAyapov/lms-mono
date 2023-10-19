@@ -12,9 +12,14 @@ var button_id = 1;
 </script>
 
 {% if request.user.is_authenticated %}
+
 <div class="container course-container">
 	<div class="course-details-block clear-fix">
-		<h1>Тақырып - {{ object_course.title }} </h1>
+		<h1 class="clear-fix" class="course-title">
+			<p>Тема - {{ object_course.title }} </p>
+			
+		</h1>
+		{% if object_course.course_type == 'В платформе' %}
 		{% if not user_result  %}
 		<div class="tab">
 			<span class="tab-open-button" style="display:none;">
@@ -33,18 +38,18 @@ var button_id = 1;
 			
 
 			{% for task_t_id in object_course.task_t.all %}
-			<button class="tablinks" onclick="openTask(event, 'task_test_{{ task_t_id.id }}')" id="open_button_t_{{ task_t_id.id }}">Тест тапсырмалар</button>
+			<button class="tablinks" onclick="openTask(event, 'task_test_{{ task_t_id.id }}')" id="open_button_t_{{ task_t_id.id }}">Тапсырма</button>
 			{% endfor %}
 
 			{% for task_i_id in object_course.task_i.all %}
-			<button class="tablinks" onclick="openTask(event, 'identify_{{ task_i_id.id }}')" id="identifyOpen{{ task_i_id.id }}">Сәйкестендір</button>
+			<button class="tablinks" onclick="openTask(event, 'identify_{{ task_i_id.id }}')" id="identifyOpen{{ task_i_id.id }}">Тапсырма </button>
 			{% endfor %}
 
 			{% for task_id in object_course.task_f.all %}
-			<button class="tablinks" onclick="openTask(event, 'task_feel_{{ task_id.id }}')" id="open_button_{{ task_id.id }}">{{ task_id.t_type }}</button>
+			<button class="tablinks" onclick="openTask(event, 'task_feel_{{ task_id.id }}')" id="open_button_{{ task_id.id }}">Тапсырма</button>
 			{% endfor %}
 			
-			<button class="tablinks" onclick="openTask(event, 'result')" id="resultSave">Нәтиже</button>
+			<button class="tablinks" onclick="openTask(event, 'result')" id="resultSave">Результат</button>
 
 		</div>
 
@@ -319,7 +324,7 @@ var button_id = 1;
 						<input type="hidden" name="true_task" maxlength="3" required id="id_true_task">
 						<input type="hidden" name="false_task" maxlength="3" required id="id_false_task">
 						<input type="hidden" name="user_false_answers" required id="id_user_false_answers">
-						<input type="text" name="feedback" maxlength="520" required id="id_feedback" 	placeholder="Кері байланыс">
+						<input type="text" name="feedback" maxlength="520" required id="id_feedback" 	placeholder="Кері байланыс жаз">
 						<button id="button_save" onclick="localStorage.clear()">Сақтау</button>
 					</form>
 				</div>
@@ -330,23 +335,31 @@ var button_id = 1;
 			<!-- <button class="tablinks" onclick="openTask(event, 'result')" id="resultSave"></button> -->
 		</div>
 		<div id="result" class="tabcontent"><br><br>
-			<h3>Нәтиже</h3>
-			<p>Сіз сабақты өтіп қойдыңыз</p> 
+			<h3>Нәту\иже</h3>
+			<p>Сабақты өтіп қойдыңыз</p> 
 			{% for res in user_result %}
 			<div class="result-block">
-				<div id="all_answer">Барлығы {{ res.all_task }}</div> 
-				<div id="true_answer">Дұрыс {{ res.true_task }}</div> 
-				<div id="false_answer">Қате {{ res.false_task }}</div> 
+				<div id="all_answer">Барлығы: {{ res.all_task }}</div> 
+				<div id="true_answer">Дұрыс: {{ res.true_task }}</div> 
+				<div id="false_answer">Қате: {{ res.false_task }}</div> 
 				 
 			</div>
 			{% if res.user_false_answers %}
 			<div class="false-answers-block">
-				<h3>Қате сұрақтар</h3>
+				<h3>Не правильные вопросы</h3>
 				{{ res.user_false_answers|safe }}
 			</div>
 			{% endif %}
 			{% endfor %}
 		</div>
+		{% endif %}
+		{% else %}
+		<form action="{% url 'create_journal' %}" method="POST">
+			{% csrf_token %}
+			<input type="hidden" name="subject" value="{{ object_course.id }}">
+			<button type="submit" style="background: #999; color: #fff;
+			outline: none; border: 0; padding:5px 10px; border-radius: 10px;">Журнал қосу</button>
+		</form>
 		{% endif %}
 	</div>
 </div>

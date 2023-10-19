@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} - {{ object.username}}{% endblock %}
+{% block link %}<link rel="stylesheet" type="text/css" href="{% static 'main/style/members.css' %}">{% endblock %}
+
+{% block content %}
+<style type="text/css">
+	form {
+		align-items: inherit;
+		width: 600px;
+		margin: 5vh auto;
+	}
+	form textarea {
+		background-color: #eee;
+	border: none;
+	padding: 12px 15px;
+	margin: 8px 0;
+	width: 100%;
+	} 
+</style>
+
+<form action="" method="post" enctype="multipart/form-data">
+	{% csrf_token %}
+	{{ form.as_p }}
+	<button type="submit">Сақтау</button>
+</form>
+{% endblock %}
